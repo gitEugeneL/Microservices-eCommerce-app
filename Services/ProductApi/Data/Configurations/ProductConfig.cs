@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ProductApi.Entities;
+using ProductApi.Models.Entities;
 
 namespace ProductApi.Data.Configurations;
 
