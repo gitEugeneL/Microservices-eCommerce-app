@@ -37,7 +37,6 @@ internal class ProductService(
             });
         
         return new ProductResponseDto().ToProductResponseDto(product);
-        return new ProductResponseDto();
     }
 
     public async Task<ProductResponseDto> GetOneProduct(Guid id)

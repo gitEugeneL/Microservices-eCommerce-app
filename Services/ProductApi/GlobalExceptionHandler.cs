@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Diagnostics;
+using ProductApi.Exceptions;
 
-namespace ProductApi.Exceptions;
+namespace ProductApi;
 
 public class GlobalExceptionHandler() : IExceptionHandler
 {
