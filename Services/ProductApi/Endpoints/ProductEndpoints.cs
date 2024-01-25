@@ -21,6 +21,7 @@ public static class ProductEndpoints
             .Produces<ProductResponseDto>();
 
         group.MapPut("", UpdateProduct)
+            .WithValidator<ProductUpdateDto>()
             .Produces<ProductResponseDto>();
 
         group.MapDelete("{productId:guid}", DeleteProductById)

@@ -1,8 +1,11 @@
 using Asp.Versioning;
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using ProductApi;
 using ProductApi.Data;
-using ProductApi.Exceptions;
+using ProductApi.Endpoints;
+using ProductApi.Models.DTO.Products;
 using ProductApi.Repositories;
 using ProductApi.Repositories.Interfaces;
 using ProductApi.Services;
@@ -11,7 +14,6 @@ using Swashbuckle.AspNetCore.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -19,7 +21,9 @@ builder.Services
     .AddScoped<ICategoryService, CategoryService>()
     .AddScoped<ICategoryRepository, CategoryRepository>()
     .AddScoped<IProductService, ProductService>()
-    .AddScoped<IProductRepository, ProductRepository>();
+    .AddScoped<IProductRepository, ProductRepository>()
+    .AddScoped<IValidator<ProductRequestDto>, ProductRequestValidator>()
+    .AddScoped<IValidator<ProductUpdateDto>, ProductUpdateValidator>();
 
 /*** Api versioning connection ***/
 builder.Services.AddApiVersioning(options =>
@@ -42,7 +46,7 @@ builder.Services.AddSwaggerGen(c =>
     c.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
     {
         Description =
-            """ Standard JWT Bearer Authorization with refresh token. Example: "Bearer" {your token} """,
+            " Standard JWT Bearer Authorization with refresh token. Example: Bearer {your token} ",
         In = ParameterLocation.Header,
         Name = "Authorization",
         Type = SecuritySchemeType.ApiKey
@@ -55,6 +59,7 @@ builder.Services.AddDbContext<DataContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString(("PSQL")))
 );
 
+/*** Global exception handler ***/
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
 
@@ -71,9 +76,11 @@ if (app.Environment.IsDevelopment())
 app.UseSwagger();
 app.UseSwaggerUI();
 
-app.UseHttpsRedirection();
+/*** Add Endpoints ***/
+app.MapCategoryEndpoints();
+app.MapProductEndpoints();
 
-app.MapControllers();
+app.UseHttpsRedirection();
 
 app.UseExceptionHandler();
 

@@ -1,23 +1,35 @@
-using System.ComponentModel.DataAnnotations;
+using FluentValidation;
 
 namespace ProductApi.Models.DTO.Products;
 
 public sealed record ProductRequestDto(
-
-     [Required] 
      Guid CategoryId,
-     
-     [Required] 
-     [MaxLength(150)] 
      string Title,
-     
-     [Required]
-     [Range(10, double.MaxValue)]
      decimal Price,
-     
-     [MaxLength(250)] 
      string? Description,
-     
-     [MaxLength(250)] 
      string? ImageUrl
 );
+
+public sealed class ProductRequestValidator : AbstractValidator<ProductRequestDto>
+{
+     public ProductRequestValidator()
+     {
+          RuleFor(p => p.CategoryId)
+               .NotEmpty();
+
+          RuleFor(p => p.Title)
+               .NotEmpty()
+               .MaximumLength(150);
+
+          RuleFor(p => p.Price)
+               .NotEmpty()
+               .GreaterThanOrEqualTo(1);
+
+          RuleFor(p => p.Description)
+               .MaximumLength(250);
+
+          RuleFor(p => p.ImageUrl)
+               .MaximumLength(250);
+     }
+}
+
