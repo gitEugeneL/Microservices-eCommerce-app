@@ -1,21 +1,20 @@
 version: "3.8"
 
 services:
-  
-  productApi-DB:
-    container_name: productApi-DB
+  productApi.database:
+    container_name: productApi.database
     image: postgres:latest
     environment:
-      POSTGRES_DB: productApi-DB
-      POSTGRES_USER: dev_user
-      POSTGRES_PASSWORD: dev_password
+      POSTGRES_DB: productApi
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
     ports:
       - "5432:5432"
     volumes:
-      - productApi-DB:/var/lib/postgresql/data:rw
+      - productApi.database:/var/lib/postgresql/data:rw
 
-#  productApi-App:
-#    container_name: productApi-App
+#  productApi.app:
+#    container_name: productApi.app
 
 volumes:
-  productApi-DB:
+  productApi.database:
