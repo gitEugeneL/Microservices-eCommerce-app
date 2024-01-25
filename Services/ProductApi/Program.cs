@@ -1,4 +1,3 @@
-using Asp.Versioning;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
@@ -24,21 +23,6 @@ builder.Services
     .AddScoped<IProductRepository, ProductRepository>()
     .AddScoped<IValidator<ProductRequestDto>, ProductRequestValidator>()
     .AddScoped<IValidator<ProductUpdateDto>, ProductUpdateValidator>();
-
-/*** Api versioning connection ***/
-builder.Services.AddApiVersioning(options =>
-{
-    options.DefaultApiVersion = new ApiVersion(1);
-    options.ReportApiVersions = true;
-    options.AssumeDefaultVersionWhenUnspecified = true;
-    options.ApiVersionReader = ApiVersionReader.Combine(
-        new UrlSegmentApiVersionReader(),
-        new HeaderApiVersionReader("X-Api-Version"));
-}).AddApiExplorer(options =>
-{
-    options.GroupNameFormat = "'v'V";
-    options.SubstituteApiVersionInUrl = true;
-});
 
 /*** Swagger connection ***/
 builder.Services.AddSwaggerGen(c =>

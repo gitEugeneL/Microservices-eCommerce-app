@@ -1,4 +1,3 @@
-using ProductApi.Entities;
 using ProductApi.Models.Entities;
 
 namespace ProductApi.Repositories.Interfaces;
