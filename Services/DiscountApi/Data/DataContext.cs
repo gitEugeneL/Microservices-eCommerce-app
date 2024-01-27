@@ -1,0 +1,30 @@
+using System.Reflection;
+using DiscountApi.Data.Entities.Common;
+using DiscountApi.Models.Entities;
+using Microsoft.EntityFrameworkCore;
+
+namespace DiscountApi.Data;
+
+public class DataContext(DbContextOptions<DataContext> options) : DbContext(options)
+{
+    public required DbSet<Discount> Discounts { get; init; }
+    
+    protected override void OnModelCreating(ModelBuilder builder)
+    {
+        builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+        base.OnModelCreating(builder);
+    }
+    
+    public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken token = default)
+    {
+        foreach (var entity in ChangeTracker
+                     .Entries()
+                     .Where(x => x is { Entity: BaseAuditableEntity, State: EntityState.Modified })
+                     .Select(x => x.Entity)
+                     .Cast<BaseAuditableEntity>())
+        {
+            entity.LastModified = DateTime.UtcNow;
+        }
+        return base.SaveChangesAsync(acceptAllChangesOnSuccess, token);
+    }
+}

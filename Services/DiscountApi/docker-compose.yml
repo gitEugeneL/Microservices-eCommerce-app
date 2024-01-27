@@ -6,13 +6,11 @@ services:
     container_name: discount-api.database
     image: postgres:latest
     environment:
-      POSTGRES_DB: app
+      POSTGRES_DB: discount
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
     ports:
-      - "5432:5432"
-    networks:
-      - discount-api.database
+      - "6001:5432"
     volumes:
       - discount-api.database:/var/lib/postgresql/data:rw
       
