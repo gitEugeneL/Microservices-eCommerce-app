@@ -1,4 +1,4 @@
-using DiscountApi.Models.Entities;
+using DiscountApi.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

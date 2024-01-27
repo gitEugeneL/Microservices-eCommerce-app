@@ -1,4 +1,4 @@
-using DiscountApi.Models.Entities;
+using DiscountApi.Data.Entities;
 
 namespace DiscountApi.Data;
 

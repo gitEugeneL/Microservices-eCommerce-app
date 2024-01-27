@@ -1,4 +1,7 @@
 using DiscountApi.Data;
+using DiscountApi.Endpoints;
+using DiscountApi.Models.Dto;
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
@@ -7,6 +10,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services
+    .AddScoped<IValidator<DiscountRequestDto>, DiscountRequestValidator>();
 
 /*** Swagger configuration ***/
 builder.Services.AddSwaggerGen(c =>
@@ -40,6 +46,7 @@ app.UseSwagger();
 app.UseSwaggerUI();
 
 /*** Add Endpoints ***/
+app.MapDiscountEndpoints();
 
 app.UseHttpsRedirection();
 

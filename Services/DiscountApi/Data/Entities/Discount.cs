@@ -1,10 +1,10 @@
 using DiscountApi.Data.Entities.Common;
 
-namespace DiscountApi.Models.Entities;
+namespace DiscountApi.Data.Entities;
 
 public sealed class Discount : BaseAuditableEntity
 {
-    public string Code { get; set; } = string.Empty;
-    public double Quantity { get; set; }
-    public int MinValue { get; set; }
+    public string Code { get; init; } = string.Empty;
+    public double Quantity { get; init; }
+    public int MinValue { get; init; }
 }

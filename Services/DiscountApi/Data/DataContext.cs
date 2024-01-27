@@ -1,6 +1,6 @@
 using System.Reflection;
+using DiscountApi.Data.Entities;
 using DiscountApi.Data.Entities.Common;
-using DiscountApi.Models.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace DiscountApi.Data;
