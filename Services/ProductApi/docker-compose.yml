@@ -1,20 +1,41 @@
 version: "3.8"
 
 services:
-  productApi.database:
-    container_name: productApi.database
+  
+  product-api.database:
+    container_name: product-api.database
     image: postgres:latest
     environment:
-      POSTGRES_DB: productApi
+      POSTGRES_DB: app
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
     ports:
       - "5432:5432"
+    networks:
+      - product-api-network
     volumes:
       - productApi.database:/var/lib/postgresql/data:rw
 
-#  productApi.app:
-#    container_name: productApi.app
+  product-api.app:
+    container_name: product-api.app
+    build: .
+    environment:
+      - "ASPNETCORE_ENVIRONMENT=Development"
+      - "ConnectionStrings__PSQL=Host=product-api.database;Port=5432;Database=app;Username=user;Password=password;"  
+    ports:
+      - "8080:8080"
+    depends_on:
+      - product-api.database
+    networks:
+      - product-api-network
+    deploy:
+      restart_policy:
+        condition: on-failure
+        max_attempts: 3
+
+networks:
+  product-api-network:
+    driver: bridge
 
 volumes:
   productApi.database:

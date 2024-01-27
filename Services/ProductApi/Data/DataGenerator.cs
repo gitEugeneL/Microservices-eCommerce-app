@@ -25,6 +25,6 @@ public static class DataGenerator
             .Generate(20);
 
         context.AddRangeAsync(products);
-        context.SaveChangesAsync();
+        context.SaveChanges();
     }
 }
