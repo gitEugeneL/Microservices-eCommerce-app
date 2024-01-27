@@ -1,5 +1,9 @@
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
+using ProductApi.Exceptions;
 using ProductApi.Models.DTO.Products;
 using ProductApi.Services.Interfaces;
+using ProductApi.Utils;
 
 namespace ProductApi.Endpoints;
 
@@ -28,33 +32,66 @@ public static class ProductEndpoints
             .Produces(StatusCodes.Status204NoContent);
     }
 
-    private static async Task<IResult> CreateProduct(ProductRequestDto dto, IProductService service)
+    private static async Task<Results<Created<ProductResponseDto>, NotFound<string>>> CreateProduct(
+        [FromBody] ProductRequestDto dto, 
+        [FromServices] IProductService service)
     {
-        var result = await service.CreateProduct(dto);
-        return Results.Created(result.ProductId.ToString(), result);
+        try
+        {
+            var result = await service.CreateProduct(dto);
+            return TypedResults.Created(result.ProductId.ToString(), result);
+        }
+        catch (NotFoundException e)
+        {
+            return TypedResults.NotFound(e.Message);
+        }
+    }
+    
+    private static async Task<Results<Ok<ProductResponseDto>, NotFound<string>>> GetProductById(
+        [FromRoute] Guid productId, 
+        [FromServices] IProductService service)
+    {
+        try
+        {
+            return TypedResults.Ok(await service.GetOneProduct(productId));
+        }
+        catch (Exception e)
+        {
+            return TypedResults.NotFound(e.Message);
+        }
+    }
+    
+    private static async Task<IResult> GetProducts([FromServices] IProductService service)
+    {
+        return TypedResults.Ok(await service.GetAllProducts());
+    }
+    
+    private static async Task<Results<Ok<ProductResponseDto>, NotFound<string>>> UpdateProduct(
+        [FromBody] ProductUpdateDto dto, 
+        [FromServices] IProductService service)
+    {
+        try
+        {
+            return TypedResults.Ok(await service.UpdateProduct(dto));
+        }
+        catch (NotFoundException e)
+        {
+            return TypedResults.NotFound(e.Message);
+        }
     }
 
-    private static async Task<IResult> GetProducts(IProductService service)
+    private static async Task<Results<NoContent, NotFound<string>>> DeleteProductById(
+        [FromRoute] Guid productId, 
+        [FromServices] IProductService service)
     {
-        var result = await service.GetAllProducts();
-        return Results.Ok(result);
-    }
-
-    private static async Task<IResult> GetProductById(Guid productId, IProductService service)
-    {
-        var result = await service.GetOneProduct(productId);
-        return Results.Ok(result);
-    }
-
-    private static async Task<IResult> UpdateProduct(ProductUpdateDto dto, IProductService service)
-    {
-        var result = await service.UpdateProduct(dto);
-        return Results.Ok(result);
-    }
-
-    private static async Task<IResult> DeleteProductById(Guid productId, IProductService service)
-    {
-        await service.DeleteProduct(productId);
-        return Results.NoContent();
+        try
+        {
+            await service.DeleteProduct(productId);
+            return TypedResults.NoContent();
+        }
+        catch (NotFoundException e)
+        {
+            return TypedResults.NotFound(e.Message);
+        }
     }
 }

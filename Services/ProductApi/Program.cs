@@ -9,6 +9,7 @@ using ProductApi.Repositories;
 using ProductApi.Repositories.Interfaces;
 using ProductApi.Services;
 using ProductApi.Services.Interfaces;
+using ProductApi.Utils;
 using Swashbuckle.AspNetCore.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,13 +19,13 @@ builder.Services.AddSwaggerGen();
 
 builder.Services
     .AddScoped<ICategoryService, CategoryService>()
-    .AddScoped<ICategoryRepository, CategoryRepository>()
     .AddScoped<IProductService, ProductService>()
+    .AddScoped<ICategoryRepository, CategoryRepository>()
     .AddScoped<IProductRepository, ProductRepository>()
     .AddScoped<IValidator<ProductRequestDto>, ProductRequestValidator>()
     .AddScoped<IValidator<ProductUpdateDto>, ProductUpdateValidator>();
 
-/*** Swagger connection ***/
+/*** Swagger configuration ***/
 builder.Services.AddSwaggerGen(c =>
 {
     c.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
@@ -38,23 +39,22 @@ builder.Services.AddSwaggerGen(c =>
     c.OperationFilter<SecurityRequirementsOperationFilter>();
 });
 
-/*** Database connection ***/
-builder.Services.AddDbContext<DataContext>(options => 
-    options.UseNpgsql(builder.Configuration.GetConnectionString(("PSQL")))
-);
-
 /*** Global exception handler ***/
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
+
+/*** Database connection ***/
+builder.Services.AddDbContext<DataContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("PSQL")));
 
 var app = builder.Build();
 
 /*** Init develop database data ***/
 if (app.Environment.IsDevelopment())
 {
-    using var scope = app.Services.CreateScope();
-    var context = scope.ServiceProvider.GetService<DataContext>()!;
-    DataInitializer.Init(context);
+     using var scope = app.Services.CreateScope();
+     var context = scope.ServiceProvider.GetService<DataContext>()!;
+     DataInitializer.Init(context);
 }
 
 app.UseSwagger();

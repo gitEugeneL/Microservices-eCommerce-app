@@ -1,18 +1,15 @@
 using Microsoft.AspNetCore.Diagnostics;
-using ProductApi.Exceptions;
 
-namespace ProductApi;
+namespace ProductApi.Utils;
 
-public class GlobalExceptionHandler() : IExceptionHandler
+public class GlobalExceptionHandler : IExceptionHandler
 {
     public async ValueTask<bool> TryHandleAsync(
         HttpContext httpContext, Exception exception, CancellationToken cancellationToken)
     {
         var (statusCodes, errorMessage) = exception switch
         {
-            UnauthorizedException => (401, exception.Message),
-            NotFoundException => (404, exception.Message),
-            AlreadyExistException => (409, exception.Message),
+            // [!] If you want you can catch other exceptions here
             _ => (500, "Something went wrong")
         };
 

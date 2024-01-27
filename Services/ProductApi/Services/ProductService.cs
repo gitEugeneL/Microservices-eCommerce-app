@@ -36,20 +36,20 @@ internal class ProductService(
                 Category = await FindCategoryOrThrow(dto.CategoryId)
             });
         
-        return new ProductResponseDto().ToProductResponseDto(product);
+        return new ProductResponseDto(product);
     }
 
     public async Task<ProductResponseDto> GetOneProduct(Guid id)
     {
         var product = await FindProductOrThrow(id);
-        return new ProductResponseDto().ToProductResponseDto(product);
+        return new ProductResponseDto(product);
     }
 
     public async Task<IEnumerable<ProductResponseDto>> GetAllProducts()
     {
         var products = await productRepository.GetAllProducts();
         return products
-            .Select(p => new ProductResponseDto().ToProductResponseDto(p));
+            .Select(p => new ProductResponseDto(p));
     }
 
     public async Task<ProductResponseDto> UpdateProduct(ProductUpdateDto dto)
@@ -62,7 +62,7 @@ internal class ProductService(
         product.ImageUrl = dto.ImageUrl ?? product.ImageUrl;
 
         var updatedProduct = await productRepository.UpdateProduct(product);
-        return new ProductResponseDto().ToProductResponseDto(updatedProduct);
+        return new ProductResponseDto(updatedProduct);
     }
 
     public async Task DeleteProduct(Guid id)

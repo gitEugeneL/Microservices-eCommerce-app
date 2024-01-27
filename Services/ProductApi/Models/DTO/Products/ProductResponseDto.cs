@@ -10,8 +10,8 @@ public sealed record ProductResponseDto
     public string? Description { get; set; }
     public string? ImageUrl { get; set; }
     public Guid CategoryId { get; set; }
-    
-    public ProductResponseDto ToProductResponseDto(Product product)
+
+    public ProductResponseDto(Product product)
     {
         ProductId = product.Id;
         Title = product.Title;
@@ -19,7 +19,5 @@ public sealed record ProductResponseDto
         Description = product.Description;
         ImageUrl = product.ImageUrl;
         CategoryId = product.CategoryId;
-
-        return this;
     }
 }

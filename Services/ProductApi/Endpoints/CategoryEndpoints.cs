@@ -1,3 +1,6 @@
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
+using ProductApi.Exceptions;
 using ProductApi.Models.DTO.Categories;
 using ProductApi.Services.Interfaces;
 
@@ -17,15 +20,22 @@ public static class CategoryEndpoint
             .Produces<CategoryResponseDto>();
     }
 
-    private static async Task<IResult> GetCategories(ICategoryService service)
+    private static async Task<IResult> GetCategories([FromServices] ICategoryService service)
     {
-        var result = await service.GetAllCategories();
-        return Results.Ok(result);
+        return TypedResults.Ok(await service.GetAllCategories());
     }
-
-    private static async Task<IResult> GetCategoryById(Guid categoryId, ICategoryService service)
+    
+    private static async Task<Results<Ok<CategoryResponseDto>, NotFound<string>>> GetCategoryById(
+        [FromRoute] Guid categoryId, 
+        [FromServices] ICategoryService service)
     {
-        var result = await service.GetOneCategory(categoryId);
-        return Results.Ok(result);
+        try
+        {
+            return TypedResults.Ok(await service.GetOneCategory(categoryId));
+        }
+        catch (NotFoundException e)
+        {
+            return TypedResults.NotFound(e.Message);
+        }
     }
 }
