@@ -32,7 +32,7 @@ public static class ProductEndpoints
             .Produces(StatusCodes.Status204NoContent);
     }
 
-    private static async Task<Results<Created<ProductResponseDto>, NotFound<string>>> CreateProduct(
+    private static async Task<Results<Created<ProductResponseDto>, Conflict<string>, NotFound<string>>> CreateProduct(
         [FromBody] ProductRequestDto dto, 
         [FromServices] IProductService service)
     {
@@ -40,6 +40,10 @@ public static class ProductEndpoints
         {
             var result = await service.CreateProduct(dto);
             return TypedResults.Created(result.ProductId.ToString(), result);
+        }
+        catch (AlreadyExistException e)
+        {
+            return TypedResults.Conflict(e.Message);
         }
         catch (NotFoundException e)
         {

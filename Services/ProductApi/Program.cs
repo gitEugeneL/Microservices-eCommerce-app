@@ -1,7 +1,6 @@
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
-using ProductApi;
 using ProductApi.Data;
 using ProductApi.Endpoints;
 using ProductApi.Models.DTO.Products;

@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using ProductApi.Data;
-using ProductApi.Entities;
+using ProductApi.Data.Entities;
 using ProductApi.Repositories.Interfaces;
 
 namespace ProductApi.Repositories;

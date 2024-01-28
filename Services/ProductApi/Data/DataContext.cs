@@ -1,8 +1,7 @@
 using System.Reflection;
 using Microsoft.EntityFrameworkCore;
-using ProductApi.Entities;
-using ProductApi.Entities.Common;
-using ProductApi.Models.Entities;
+using ProductApi.Data.Entities;
+using ProductApi.Data.Entities.Common;
 
 namespace ProductApi.Data;
 

@@ -1,12 +1,17 @@
 using Microsoft.EntityFrameworkCore;
 using ProductApi.Data;
-using ProductApi.Models.Entities;
+using ProductApi.Data.Entities;
 using ProductApi.Repositories.Interfaces;
 
 namespace ProductApi.Repositories;
 
 internal class ProductRepository(DataContext context) : IProductRepository
 {
+    public async Task<bool> ProductExists(string title)
+    {
+        return await context.Products.AnyAsync(p => p.Title == title);
+    }
+    
     public async Task DeleteProduct(Product product)
     {
         context.Products.Remove(product);

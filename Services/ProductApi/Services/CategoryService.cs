@@ -1,4 +1,4 @@
-using ProductApi.Entities;
+using ProductApi.Data.Entities;
 using ProductApi.Exceptions;
 using ProductApi.Models.DTO.Categories;
 using ProductApi.Repositories.Interfaces;

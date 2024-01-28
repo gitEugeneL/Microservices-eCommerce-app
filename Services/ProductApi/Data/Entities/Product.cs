@@ -1,7 +1,6 @@
-using ProductApi.Entities;
-using ProductApi.Entities.Common;
+using ProductApi.Data.Entities.Common;
 
-namespace ProductApi.Models.Entities;
+namespace ProductApi.Data.Entities;
 
 public sealed class Product : BaseAuditableEntity
 {

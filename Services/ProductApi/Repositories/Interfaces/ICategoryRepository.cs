@@ -1,4 +1,4 @@
-using ProductApi.Entities;
+using ProductApi.Data.Entities;
 
 namespace ProductApi.Repositories.Interfaces;
 

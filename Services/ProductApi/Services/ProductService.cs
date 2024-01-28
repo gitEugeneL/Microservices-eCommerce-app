@@ -1,7 +1,6 @@
-using ProductApi.Entities;
+using ProductApi.Data.Entities;
 using ProductApi.Exceptions;
 using ProductApi.Models.DTO.Products;
-using ProductApi.Models.Entities;
 using ProductApi.Repositories.Interfaces;
 using ProductApi.Services.Interfaces;
 
@@ -26,6 +25,9 @@ internal class ProductService(
     
     public async Task<ProductResponseDto> CreateProduct(ProductRequestDto dto)
     {
+        if (await productRepository.ProductExists(dto.Title))
+            throw new AlreadyExistException(nameof(Product), dto.Title);
+        
         var product = await productRepository.CreateProduct(
             new Product
             {
