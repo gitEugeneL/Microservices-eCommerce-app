@@ -20,4 +20,11 @@
         <PackageReference Include="Swashbuckle.AspNetCore.Filters" Version="8.0.0" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Content Include="..\..\.dockerignore">
+        <Link>.dockerignore</Link>
+        <DependentUpon>Dockerfile</DependentUpon>
+      </Content>
+    </ItemGroup>
+
 </Project>

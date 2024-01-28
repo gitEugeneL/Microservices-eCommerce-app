@@ -11,8 +11,31 @@ services:
       POSTGRES_PASSWORD: password
     ports:
       - "6001:5432"
+    networks:
+      - discount-api-network
     volumes:
       - discount-api.database:/var/lib/postgresql/data:rw
-      
+
+  discount-api.app:
+    container_name: discount-api.app
+    build: .
+    environment:
+      - "ASPNETCORE_ENVIRONMENT=Development"
+      - "ConnectionStrings__PSQL=Host=discount-api.database;Port=5432;Database=discount;Username=user;Password=password;"
+    ports:
+      - "8001:8080"
+    depends_on:
+      - discount-api.database
+    networks: 
+      - discount-api-network
+    deploy:
+      restart_policy:
+        condition: on-failure
+        max_attempts: 3
+
+networks:
+  discount-api-network:
+    driver: bridge
+
 volumes:
   discount-api.database:
