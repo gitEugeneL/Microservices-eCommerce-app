@@ -6,7 +6,7 @@ public sealed class Product : BaseAuditableEntity
 {
     public required string Title { get; set; }
     public string? Description { get; set; }
-    public string? ImageUrl { get; set; }
+    public string? ImageName { get; set; }
     public decimal Price { get; set; }
 
     /*** Relations ***/

@@ -4,10 +4,17 @@ namespace ProductApi.Repositories.Interfaces;
 
 public interface IProductRepository
 {
-    Task<bool> ProductExists(string title);
-    Task DeleteProduct(Product product);
-    Task<Product> CreateProduct(Product product);
-    Task<Product> UpdateProduct(Product product);
-    Task<Product?> GetProductById(Guid id);
+    Task<bool> ProductExistsByTitle(string title);
+    
+    Task<bool> CreateProduct(Product product);
+    
+    Task<bool> DeleteProduct(Product product);
+    
+    Task<bool> UpdateProduct(Product product);
+    
     Task<IEnumerable<Product>> GetAllProducts();
+    
+    Task<Product?> GetProductById(Guid productId);
+    
+    Task<Product?> GetProductByTitle(string title);
 }

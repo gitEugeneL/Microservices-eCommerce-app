@@ -30,7 +30,7 @@ namespace ProductApi.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Title = table.Column<string>(type: "character varying(150)", maxLength: 150, nullable: false),
                     Description = table.Column<string>(type: "character varying(250)", maxLength: 250, nullable: true),
-                    ImageUrl = table.Column<string>(type: "text", nullable: true),
+                    ImageName = table.Column<string>(type: "character varying(250)", maxLength: 250, nullable: true),
                     Price = table.Column<decimal>(type: "numeric(20,2)", nullable: false),
                     CategoryId = table.Column<Guid>(type: "uuid", nullable: false),
                     Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),

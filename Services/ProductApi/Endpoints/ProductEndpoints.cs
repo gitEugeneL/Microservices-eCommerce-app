@@ -32,9 +32,10 @@ public static class ProductEndpoints
             .Produces(StatusCodes.Status204NoContent);
     }
 
-    private static async Task<Results<Created<ProductResponseDto>, Conflict<string>, NotFound<string>>> CreateProduct(
-        [FromBody] ProductRequestDto dto, 
-        [FromServices] IProductService service)
+    private static async Task<Results<Created<ProductResponseDto>, Conflict<string>, BadRequest<string>, NotFound<string>>> 
+        CreateProduct(
+            [FromBody] ProductRequestDto dto, 
+            [FromServices] IProductService service)
     {
         try
         {
@@ -48,6 +49,10 @@ public static class ProductEndpoints
         catch (NotFoundException e)
         {
             return TypedResults.NotFound(e.Message);
+        }
+        catch (DbException e)
+        {
+            return TypedResults.BadRequest(e.Message);
         }
     }
     
@@ -70,7 +75,7 @@ public static class ProductEndpoints
         return TypedResults.Ok(await service.GetAllProducts());
     }
     
-    private static async Task<Results<Ok<ProductResponseDto>, NotFound<string>>> UpdateProduct(
+    private static async Task<Results<Ok<ProductResponseDto>, BadRequest<string>, NotFound<string>>> UpdateProduct(
         [FromBody] ProductUpdateDto dto, 
         [FromServices] IProductService service)
     {
@@ -82,9 +87,13 @@ public static class ProductEndpoints
         {
             return TypedResults.NotFound(e.Message);
         }
+        catch (DbException e)
+        {
+            return TypedResults.BadRequest(e.Message);
+        }
     }
 
-    private static async Task<Results<NoContent, NotFound<string>>> DeleteProductById(
+    private static async Task<Results<NoContent, BadRequest<string>, NotFound<string>>> DeleteProductById(
         [FromRoute] Guid productId, 
         [FromServices] IProductService service)
     {
@@ -96,6 +105,10 @@ public static class ProductEndpoints
         catch (NotFoundException e)
         {
             return TypedResults.NotFound(e.Message);
+        }
+        catch (DbException e)
+        {
+            return TypedResults.BadRequest(e.Message);
         }
     }
 }

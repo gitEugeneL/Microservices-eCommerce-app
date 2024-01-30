@@ -7,39 +7,60 @@ namespace ProductApi.Repositories;
 
 internal class ProductRepository(DataContext context) : IProductRepository
 {
-    public async Task<bool> ProductExists(string title)
+    public async Task<bool> ProductExistsByTitle(string title)
     {
-        return await context.Products.AnyAsync(p => p.Title == title);
-    }
-    
-    public async Task DeleteProduct(Product product)
-    {
-        context.Products.Remove(product);
-        await context.SaveChangesAsync();
+        return await context
+            .Products
+            .AnyAsync(p => p.Title.ToLower() == title.ToLower());
     }
 
-    public async Task<Product> CreateProduct(Product product)
+    public async Task<bool> CreateProduct(Product product)
     {
-        await context.Products.AddAsync(product);
-        await context.SaveChangesAsync();
-        return product;
+        await context
+            .Products
+            .AddAsync(product);
+        return await context.SaveChangesAsync() > 0;
     }
 
-    public async Task<Product> UpdateProduct(Product product)
+    public async Task<bool> DeleteProduct(Product product)
     {
-        context.Products.Update(product);
-        await context.SaveChangesAsync();
-        return product;
+        context.Products
+            .Remove(product);
+        return await context.SaveChangesAsync() > 0;
     }
 
-    public async Task<Product?> GetProductById(Guid id)
+    public async Task<bool> UpdateProduct(Product product)
     {
-        return await context.Products
-            .SingleOrDefaultAsync(p => p.Id == id);
+        context.Products
+            .Update(product);
+        return await context.SaveChangesAsync() > 0;
     }
 
     public async Task<IEnumerable<Product>> GetAllProducts()
     {
-        return await context.Products.ToListAsync();
+        return await context.Products
+            .ToListAsync();
+    }
+
+    public async Task<IEnumerable<Product>> GetProductsByCategoryId(Guid categoryId)
+    {
+        return await context
+            .Products
+            .Where(p => p.CategoryId == categoryId)
+            .ToListAsync();
+    }
+
+    public async Task<Product?> GetProductById(Guid productId)
+    {
+        return await context
+            .Products
+            .SingleOrDefaultAsync(p => p.Id == productId);
+    }
+
+    public async Task<Product?> GetProductByTitle(string title)
+    {
+        return await context
+            .Products
+            .SingleOrDefaultAsync(p => p.Title.ToLower() == title.ToLower());
     }
 }

@@ -25,25 +25,26 @@ internal class ProductService(
     
     public async Task<ProductResponseDto> CreateProduct(ProductRequestDto dto)
     {
-        if (await productRepository.ProductExists(dto.Title))
+        if (await productRepository.ProductExistsByTitle(dto.Title))
             throw new AlreadyExistException(nameof(Product), dto.Title);
         
-        var product = await productRepository.CreateProduct(
-            new Product
-            {
-                Title = dto.Title,
-                Description = dto.Description,
-                ImageUrl = dto.ImageUrl,
-                Price = dto.Price,
-                Category = await FindCategoryOrThrow(dto.CategoryId)
-            });
+        var product = new Product
+        {
+            Title = dto.Title,
+            Description = dto.Description,
+            ImageName = dto.ImageUrl,
+            Price = dto.Price,
+            Category = await FindCategoryOrThrow(dto.CategoryId)
+        };
         
-        return new ProductResponseDto(product);
+        return await productRepository.CreateProduct(product)
+            ? new ProductResponseDto(product)
+            : throw new DbException();
     }
 
-    public async Task<ProductResponseDto> GetOneProduct(Guid id)
+    public async Task<ProductResponseDto> GetOneProduct(Guid productId)
     {
-        var product = await FindProductOrThrow(id);
+        var product = await FindProductOrThrow(productId);
         return new ProductResponseDto(product);
     }
 
@@ -53,7 +54,7 @@ internal class ProductService(
         return products
             .Select(p => new ProductResponseDto(p));
     }
-
+    
     public async Task<ProductResponseDto> UpdateProduct(ProductUpdateDto dto)
     {
         var product = await FindProductOrThrow(dto.ProductId);
@@ -61,15 +62,18 @@ internal class ProductService(
         product.Title = dto.Title ?? product.Title;
         product.Description = dto.Description ?? product.Description;
         product.Price = dto.Price ?? product.Price;
-        product.ImageUrl = dto.ImageUrl ?? product.ImageUrl;
+        product.ImageName = dto.ImageUrl ?? product.ImageName;
 
-        var updatedProduct = await productRepository.UpdateProduct(product);
-        return new ProductResponseDto(updatedProduct);
+        return await productRepository.UpdateProduct(product)
+            ? new ProductResponseDto(product)
+            : throw new DbException();
     }
 
     public async Task DeleteProduct(Guid id)
     {
         var product = await FindProductOrThrow(id);
-        await productRepository.DeleteProduct(product);
+        
+        if (!await productRepository.DeleteProduct(product))
+            throw new DbException();
     }
 }

@@ -22,7 +22,7 @@ namespace ProductApi.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("ProductApi.Entities.Category", b =>
+            modelBuilder.Entity("ProductApi.Data.Entities.Category", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -41,7 +41,7 @@ namespace ProductApi.Migrations
                     b.ToTable("Categories");
                 });
 
-            modelBuilder.Entity("ProductApi.Models.Entities.Product", b =>
+            modelBuilder.Entity("ProductApi.Data.Entities.Product", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -59,8 +59,9 @@ namespace ProductApi.Migrations
                         .HasMaxLength(250)
                         .HasColumnType("character varying(250)");
 
-                    b.Property<string>("ImageUrl")
-                        .HasColumnType("text");
+                    b.Property<string>("ImageName")
+                        .HasMaxLength(250)
+                        .HasColumnType("character varying(250)");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("timestamp with time zone");
@@ -80,9 +81,9 @@ namespace ProductApi.Migrations
                     b.ToTable("Products");
                 });
 
-            modelBuilder.Entity("ProductApi.Models.Entities.Product", b =>
+            modelBuilder.Entity("ProductApi.Data.Entities.Product", b =>
                 {
-                    b.HasOne("ProductApi.Entities.Category", "Category")
+                    b.HasOne("ProductApi.Data.Entities.Category", "Category")
                         .WithMany("Products")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -91,7 +92,7 @@ namespace ProductApi.Migrations
                     b.Navigation("Category");
                 });
 
-            modelBuilder.Entity("ProductApi.Entities.Category", b =>
+            modelBuilder.Entity("ProductApi.Data.Entities.Category", b =>
                 {
                     b.Navigation("Products");
                 });

@@ -15,7 +15,8 @@ internal class ProductConfig : IEntityTypeConfiguration<Product>
         builder.Property(p => p.Description)
             .HasMaxLength(250);
 
-        builder.Property(p => p.ImageUrl);
+        builder.Property(p => p.ImageName)
+            .HasMaxLength(250);
 
         builder.Property(p => p.Price)
             .IsRequired()

@@ -8,7 +8,7 @@ public sealed record ProductResponseDto
     public string Title { get; set; } = string.Empty;
     public decimal Price { get; set; }
     public string? Description { get; set; }
-    public string? ImageUrl { get; set; }
+    public string? ImageName { get; set; }
     public Guid CategoryId { get; set; }
 
     public ProductResponseDto(Product product)
@@ -17,7 +17,7 @@ public sealed record ProductResponseDto
         Title = product.Title;
         Price = product.Price;
         Description = product.Description;
-        ImageUrl = product.ImageUrl;
+        ImageName = product.ImageName;
         CategoryId = product.CategoryId;
     }
 }

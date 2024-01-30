@@ -19,7 +19,6 @@ public static class DataGenerator
             .RuleFor(p => p.Title, f => f.Commerce.ProductName())
             .RuleFor(p => p.Description, f => f.Commerce.ProductDescription())
             .RuleFor(p => p.Price, f => Math.Round(f.Random.Decimal(10000, 500000), 2))
-            .RuleFor(p => p.ImageUrl, "---")
             .RuleFor(p => p.Category, f => f.Random.ListItem(categories))
             .Generate(20);
 
