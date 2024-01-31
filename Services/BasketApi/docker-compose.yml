@@ -7,3 +7,26 @@ services:
     image: redis:alpine
     ports:
       - "6379:6379"
+    networks:
+      - basket-api-network
+        
+  basket-api.app:
+    container_name: basket-api.app
+    build: .
+    environment:
+      - "ASPNETCORE_ENVIRONMENT=Development"
+      - "ConnectionStrings__Redis=basket-api.database:6379"
+    ports:
+      - "8002:8080"
+    depends_on:
+      - basket-api.database
+    networks:
+      - basket-api-network
+    deploy:
+      restart_policy:
+        condition: on-failure
+        max_attempts: 3
+  
+networks:
+  basket-api-network:
+    driver: bridge
