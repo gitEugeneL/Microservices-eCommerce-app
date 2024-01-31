@@ -6,10 +6,10 @@ namespace BasketApi.Repositories;
 
 internal class BasketRepository(IDistributedCache cache) : IBasketRepository
 {
-    public async Task<Basket?> GetBasket(Guid userId)
+    public async Task<Basket?> GetBasket(string userKey)
     {
         var basket = await cache
-            .GetStringAsync(userId.ToString());
+            .GetStringAsync(userKey);
 
         return basket is not null
             ? JsonConvert.DeserializeObject<Basket>(basket)
@@ -20,15 +20,14 @@ internal class BasketRepository(IDistributedCache cache) : IBasketRepository
     {
         await cache
             .SetStringAsync(
-                key: basket.UserId.ToString(), 
+                key: basket.UserKey, 
                 value: JsonConvert.SerializeObject(basket)
             );
-        return await GetBasket(basket.UserId);
+        return await GetBasket(basket.UserKey);
     }
 
-    public async Task DeleteBasket(Basket basket)
+    public async Task DeleteBasket(string userKey)
     {
-        await cache
-            .RefreshAsync(basket.UserId.ToString());
+        await cache.RefreshAsync(userKey);
     }
 }

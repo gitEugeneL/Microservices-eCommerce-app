@@ -1,4 +1,9 @@
+using BasketApi.Endpoints;
+using BasketApi.Repositories;
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddScoped<IBasketRepository, BasketRepository>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -11,6 +16,9 @@ var app = builder.Build();
 
 app.UseSwagger();
 app.UseSwaggerUI();
+
+/*** Add Endpoints ***/
+app.MapBasketEndpoints();
 
 app.UseHttpsRedirection();
 
