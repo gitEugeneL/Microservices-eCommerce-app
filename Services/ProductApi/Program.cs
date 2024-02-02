@@ -3,11 +3,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using ProductApi.Data;
 using ProductApi.Endpoints;
-using ProductApi.Models.DTO.Products;
+using ProductApi.Models.DTO.Auctions;
 using ProductApi.Repositories;
 using ProductApi.Repositories.Interfaces;
-using ProductApi.Services;
-using ProductApi.Services.Interfaces;
 using ProductApi.Utils;
 using Swashbuckle.AspNetCore.Filters;
 
@@ -17,20 +15,15 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services
-    .AddScoped<ICategoryService, CategoryService>()
-    .AddScoped<IProductService, ProductService>()
     .AddScoped<ICategoryRepository, CategoryRepository>()
-    .AddScoped<IProductRepository, ProductRepository>()
-    .AddScoped<IValidator<ProductRequestDto>, ProductRequestValidator>()
-    .AddScoped<IValidator<ProductUpdateDto>, ProductUpdateValidator>();
+    .AddScoped<IValidator<CreateAuctionDto>, CreateAuctionValidator>();
 
 /*** Swagger configuration ***/
 builder.Services.AddSwaggerGen(c =>
 {
     c.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
     {
-        Description =
-            " Standard JWT Bearer Authorization with refresh token. Example: Bearer {your token} ",
+        Description = "JWT Bearer Authorization with refresh token",
         In = ParameterLocation.Header,
         Name = "Authorization",
         Type = SecuritySchemeType.ApiKey
@@ -61,7 +54,7 @@ app.UseSwaggerUI();
 
 /*** Add Endpoints ***/
 app.MapCategoryEndpoints();
-app.MapProductEndpoints();
+// app.MapProductEndpoints();
 
 app.UseHttpsRedirection();
 

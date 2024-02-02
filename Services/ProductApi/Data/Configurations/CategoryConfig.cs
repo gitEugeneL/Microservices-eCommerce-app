@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ProductApi.Data.Entities;
+using ProductApi.Models.Entities;
 
 namespace ProductApi.Data.Configurations;
 
@@ -16,8 +17,8 @@ internal class CategoryConfig : IEntityTypeConfiguration<Category>
             .HasMaxLength(100);
         
         /*** many to one ***/
-        builder.HasMany(c => c.Products)
-            .WithOne(p => p.Category)
-            .HasForeignKey(p => p.CategoryId);
+        builder.HasMany(c => c.Auctions)
+            .WithOne(a => a.Category)
+            .HasForeignKey(a => a.CategoryId);
     }
 }

@@ -47,15 +47,14 @@ namespace ProductApi.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("CategoryId")
+                    b.Property<Guid>("AuctionId")
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("Created")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasMaxLength(250)
                         .HasColumnType("character varying(250)");
 
@@ -66,9 +65,6 @@ namespace ProductApi.Migrations
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(20, 2)");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(150)
@@ -76,15 +72,67 @@ namespace ProductApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CategoryId");
+                    b.HasIndex("AuctionId")
+                        .IsUnique();
 
                     b.ToTable("Products");
                 });
 
+            modelBuilder.Entity("ProductApi.Entities.Auction", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("CategoryId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("EndTime")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<decimal?>("MaxBid")
+                        .HasColumnType("decimal(20, 2)");
+
+                    b.Property<Guid>("SellerId")
+                        .HasColumnType("uuid");
+
+                    b.Property<decimal>("StartPrice")
+                        .HasColumnType("decimal(20, 2)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid?>("WinnerId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.ToTable("Auctions");
+                });
+
             modelBuilder.Entity("ProductApi.Data.Entities.Product", b =>
                 {
+                    b.HasOne("ProductApi.Entities.Auction", "Auction")
+                        .WithOne("Product")
+                        .HasForeignKey("ProductApi.Data.Entities.Product", "AuctionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Auction");
+                });
+
+            modelBuilder.Entity("ProductApi.Entities.Auction", b =>
+                {
                     b.HasOne("ProductApi.Data.Entities.Category", "Category")
-                        .WithMany("Products")
+                        .WithMany("Auctions")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -94,7 +142,13 @@ namespace ProductApi.Migrations
 
             modelBuilder.Entity("ProductApi.Data.Entities.Category", b =>
                 {
-                    b.Navigation("Products");
+                    b.Navigation("Auctions");
+                });
+
+            modelBuilder.Entity("ProductApi.Entities.Auction", b =>
+                {
+                    b.Navigation("Product")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }
