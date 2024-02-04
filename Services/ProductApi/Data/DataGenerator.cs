@@ -1,4 +1,3 @@
-using ProductApi.Data.Entities;
 using ProductApi.Models.Entities;
 
 namespace ProductApi.Data;

@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using ProductApi.Data.Entities;
 using ProductApi.Models.Entities;
 
 namespace ProductApi.Data.Configurations;
@@ -18,9 +17,5 @@ internal class ProductConfig : IEntityTypeConfiguration<Product>
 
         builder.Property(p => p.ImageName)
             .HasMaxLength(250);
-        
-        /*** one to one ***/
-        builder.HasOne(p => p.Auction)
-            .WithOne(a => a.Product);
     }
 }

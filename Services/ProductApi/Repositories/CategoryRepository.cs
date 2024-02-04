@@ -7,14 +7,24 @@ namespace ProductApi.Repositories;
 
 internal class CategoryRepository(DataContext context) : ICategoryRepository
 {
+    public async Task<bool> CategoryExists(Guid categoryId)
+    {
+        return await context
+            .Categories
+            .AnyAsync(c => c.Id == categoryId);
+    }
+
     public async Task<IEnumerable<Category>> GetAllCategories()
     {
-        return await context.Categories.ToListAsync();
+        return await context
+            .Categories
+            .ToListAsync();
     }
 
     public async Task<Category?> GetCategoryById(Guid id)
     {
-        return await context.Categories
+        return await context
+            .Categories
             .SingleOrDefaultAsync(c => c.Id == id);
     }
 }

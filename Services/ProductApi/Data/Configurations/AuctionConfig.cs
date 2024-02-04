@@ -17,5 +17,8 @@ public class AuctionConfig : IEntityTypeConfiguration<Auction>
         
         builder.Property(a => a.MaxBid)
             .HasColumnType("decimal(20, 2)");
+        
+        /*** one to one ***/
+        builder.HasOne(a => a.Product);
     }
 }

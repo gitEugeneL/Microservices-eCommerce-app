@@ -1,4 +1,4 @@
-using ProductApi.Data.Entities.Common;
+using ProductApi.Models.Entities.Common;
 
 namespace ProductApi.Models.Entities;
 

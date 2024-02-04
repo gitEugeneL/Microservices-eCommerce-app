@@ -15,6 +15,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services
+    .AddScoped<IAuctionRepository, AuctionRepository>()
     .AddScoped<ICategoryRepository, CategoryRepository>()
     .AddScoped<IValidator<CreateAuctionDto>, CreateAuctionValidator>();
 
@@ -54,7 +55,7 @@ app.UseSwaggerUI();
 
 /*** Add Endpoints ***/
 app.MapCategoryEndpoints();
-// app.MapProductEndpoints();
+app.MapAuctionEndpoints();
 
 app.UseHttpsRedirection();
 

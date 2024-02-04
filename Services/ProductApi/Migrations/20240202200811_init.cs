@@ -24,6 +24,20 @@ namespace ProductApi.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Products",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Title = table.Column<string>(type: "character varying(150)", maxLength: 150, nullable: false),
+                    Description = table.Column<string>(type: "character varying(250)", maxLength: 250, nullable: false),
+                    ImageName = table.Column<string>(type: "character varying(250)", maxLength: 250, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Products", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Auctions",
                 columns: table => new
                 {
@@ -34,6 +48,7 @@ namespace ProductApi.Migrations
                     StartPrice = table.Column<decimal>(type: "numeric(20,2)", nullable: false),
                     MaxBid = table.Column<decimal>(type: "numeric(20,2)", nullable: true),
                     Status = table.Column<int>(type: "integer", nullable: false),
+                    ProductId = table.Column<Guid>(type: "uuid", nullable: false),
                     CategoryId = table.Column<Guid>(type: "uuid", nullable: false),
                     Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     LastModified = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
@@ -47,27 +62,10 @@ namespace ProductApi.Migrations
                         principalTable: "Categories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Products",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Title = table.Column<string>(type: "character varying(150)", maxLength: 150, nullable: false),
-                    Description = table.Column<string>(type: "character varying(250)", maxLength: 250, nullable: false),
-                    ImageName = table.Column<string>(type: "character varying(250)", maxLength: 250, nullable: true),
-                    AuctionId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    LastModified = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Products", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Products_Auctions_AuctionId",
-                        column: x => x.AuctionId,
-                        principalTable: "Auctions",
+                        name: "FK_Auctions_Products_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Products",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -78,15 +76,14 @@ namespace ProductApi.Migrations
                 column: "CategoryId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Auctions_ProductId",
+                table: "Auctions",
+                column: "ProductId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Categories_Value",
                 table: "Categories",
                 column: "Value",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Products_AuctionId",
-                table: "Products",
-                column: "AuctionId",
                 unique: true);
         }
 
@@ -94,13 +91,13 @@ namespace ProductApi.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Products");
-
-            migrationBuilder.DropTable(
                 name: "Auctions");
 
             migrationBuilder.DropTable(
                 name: "Categories");
+
+            migrationBuilder.DropTable(
+                name: "Products");
         }
     }
 }

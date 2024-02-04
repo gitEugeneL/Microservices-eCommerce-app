@@ -1,4 +1,4 @@
-namespace ProductApi.Data.Entities.Common;
+namespace ProductApi.Models.Entities.Common;
 
 public abstract class BaseEntity
 {
