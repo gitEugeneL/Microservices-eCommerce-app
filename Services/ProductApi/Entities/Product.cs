@@ -1,12 +1,12 @@
-using ProductApi.Data.Entities.Common;
+using ProductApi.Entities.Common;
 
-namespace ProductApi.Data.Entities;
+namespace ProductApi.Entities;
 
 public sealed class Product : BaseAuditableEntity
 {
     public required string Title { get; set; }
     public string? Description { get; set; }
-    public string? ImageName { get; set; }
+    public string? ImageUrl { get; set; }
     public decimal Price { get; set; }
 
     /*** Relations ***/

@@ -1,5 +1,5 @@
 using Bogus;
-using ProductApi.Data.Entities;
+using ProductApi.Entities;
 
 namespace ProductApi.Data;
 

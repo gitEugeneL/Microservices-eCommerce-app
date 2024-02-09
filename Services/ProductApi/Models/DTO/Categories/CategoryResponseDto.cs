@@ -1,4 +1,4 @@
-using ProductApi.Data.Entities;
+using ProductApi.Entities;
 
 namespace ProductApi.Models.DTO.Categories;
 

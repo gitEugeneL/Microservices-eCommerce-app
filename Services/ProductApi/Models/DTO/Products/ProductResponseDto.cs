@@ -1,4 +1,4 @@
-using ProductApi.Data.Entities;
+using ProductApi.Entities;
 
 namespace ProductApi.Models.DTO.Products;
 
@@ -8,7 +8,7 @@ public sealed record ProductResponseDto
     public string Title { get; set; } = string.Empty;
     public decimal Price { get; set; }
     public string? Description { get; set; }
-    public string? ImageName { get; set; }
+    public string? ImageUrl { get; set; }
     public Guid CategoryId { get; set; }
 
     public ProductResponseDto(Product product)
@@ -17,7 +17,7 @@ public sealed record ProductResponseDto
         Title = product.Title;
         Price = product.Price;
         Description = product.Description;
-        ImageName = product.ImageName;
+        ImageUrl = product.ImageUrl;
         CategoryId = product.CategoryId;
     }
 }

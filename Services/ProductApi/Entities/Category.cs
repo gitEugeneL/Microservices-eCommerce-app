@@ -1,6 +1,6 @@
-using ProductApi.Data.Entities.Common;
+using ProductApi.Entities.Common;
 
-namespace ProductApi.Data.Entities;
+namespace ProductApi.Entities;
 
 public class Category : BaseEntity
 {

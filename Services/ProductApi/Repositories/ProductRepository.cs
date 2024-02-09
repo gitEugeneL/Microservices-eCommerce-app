@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using ProductApi.Data;
-using ProductApi.Data.Entities;
+using ProductApi.Entities;
 using ProductApi.Repositories.Interfaces;
 
 namespace ProductApi.Repositories;
@@ -11,7 +11,7 @@ internal class ProductRepository(DataContext context) : IProductRepository
     {
         return await context
             .Products
-            .AnyAsync(p => p.Title.ToLower() == title.ToLower());
+            .AnyAsync(p => p.Title.ToLower().Equals(title.ToLower()));
     }
 
     public async Task<bool> CreateProduct(Product product)
@@ -61,6 +61,6 @@ internal class ProductRepository(DataContext context) : IProductRepository
     {
         return await context
             .Products
-            .SingleOrDefaultAsync(p => p.Title.ToLower() == title.ToLower());
+            .SingleOrDefaultAsync(p => p.Title.ToLower().Equals(title.ToLower()));
     }
 }

@@ -6,8 +6,6 @@ using ProductApi.Endpoints;
 using ProductApi.Models.DTO.Products;
 using ProductApi.Repositories;
 using ProductApi.Repositories.Interfaces;
-using ProductApi.Services;
-using ProductApi.Services.Interfaces;
 using ProductApi.Utils;
 using Swashbuckle.AspNetCore.Filters;
 
@@ -17,8 +15,6 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services
-    .AddScoped<ICategoryService, CategoryService>()
-    .AddScoped<IProductService, ProductService>()
     .AddScoped<ICategoryRepository, CategoryRepository>()
     .AddScoped<IProductRepository, ProductRepository>()
     .AddScoped<IValidator<ProductRequestDto>, ProductRequestValidator>()

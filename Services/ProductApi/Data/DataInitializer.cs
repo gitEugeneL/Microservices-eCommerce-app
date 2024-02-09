@@ -7,7 +7,8 @@ public static class DataInitializer
         // dotnet ef database update
         context.Database.EnsureCreated(); 
         
+        // seed data
         if(!context.Products.Any() && !context.Categories.Any())
-            DataGenerator.SeedData(context); // seed data
+            DataGenerator.SeedData(context);
     }
 }
