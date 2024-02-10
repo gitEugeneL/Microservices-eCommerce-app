@@ -1,6 +1,6 @@
 using FluentValidation;
 
-namespace ProductApi.Utils;
+namespace DiscountApi.Utils;
 
 public static class ValidatorExtension
 {

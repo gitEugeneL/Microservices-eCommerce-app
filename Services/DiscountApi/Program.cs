@@ -1,10 +1,9 @@
 using DiscountApi.Data;
 using DiscountApi.Endpoints;
 using DiscountApi.Models.Dto;
+using DiscountApi.Repositories;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Models;
-using Swashbuckle.AspNetCore.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,21 +11,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services
+    .AddScoped<IDiscountRepository, DiscountRepository>()
     .AddScoped<IValidator<DiscountRequestDto>, DiscountRequestValidator>();
-
-/*** Swagger configuration ***/
-builder.Services.AddSwaggerGen(c =>
-{
-    c.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
-    {
-        Description =
-            " Standard JWT Bearer Authorization with refresh token. Example: Bearer {your token} ",
-        In = ParameterLocation.Header,
-        Name = "Authorization",
-        Type = SecuritySchemeType.ApiKey
-    });
-    c.OperationFilter<SecurityRequirementsOperationFilter>();
-});
 
 /*** Database connection ***/
 builder.Services.AddDbContext<DataContext>(options =>

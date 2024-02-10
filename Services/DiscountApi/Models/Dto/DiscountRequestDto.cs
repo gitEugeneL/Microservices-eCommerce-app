@@ -3,25 +3,24 @@ using FluentValidation;
 namespace DiscountApi.Models.Dto;
 
 public sealed record DiscountRequestDto(
+    Guid ProductId,
     string Code,
-    double Quantity,
-    int MinValue    
+    int Amount
 );
 
 public sealed class DiscountRequestValidator : AbstractValidator<DiscountRequestDto>
 {
     public DiscountRequestValidator()
     {
-        RuleFor(p => p.Code)
+        RuleFor(d => d.ProductId)
+            .NotEmpty();
+        
+        RuleFor(d => d.Code)
             .NotEmpty();
 
-        RuleFor(p => p.Quantity)
-            .GreaterThan(5)
+        RuleFor(d => d.Amount)
+            .GreaterThan(1)
             .LessThanOrEqualTo(95)
             .NotEmpty();
-
-        RuleFor(p => p.MinValue)
-            .NotEmpty()
-            .GreaterThanOrEqualTo(1);
     }
 }

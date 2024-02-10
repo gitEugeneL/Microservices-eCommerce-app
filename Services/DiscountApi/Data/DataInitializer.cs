@@ -6,9 +6,5 @@ public static class DataInitializer
     {
         // dotnet ef database update
         context.Database.EnsureCreated();
-
-        // seed data
-        if (!context.Discounts.Any())
-            DataGenerator.SeedData(context); 
     }
 }

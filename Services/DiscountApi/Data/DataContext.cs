@@ -1,6 +1,5 @@
 using System.Reflection;
-using DiscountApi.Data.Entities;
-using DiscountApi.Data.Entities.Common;
+using DiscountApi.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace DiscountApi.Data;
@@ -19,9 +18,9 @@ public class DataContext(DbContextOptions<DataContext> options) : DbContext(opti
     {
         foreach (var entity in ChangeTracker
                      .Entries()
-                     .Where(x => x is { Entity: BaseAuditableEntity, State: EntityState.Modified })
+                     .Where(x => x is { Entity: Discount, State: EntityState.Modified })
                      .Select(x => x.Entity)
-                     .Cast<BaseAuditableEntity>())
+                     .Cast<Discount>())
         {
             entity.LastModified = DateTime.UtcNow;
         }
