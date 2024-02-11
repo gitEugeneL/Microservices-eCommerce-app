@@ -1,0 +1,41 @@
+version: "3.8"
+
+services:
+  
+  discount-grpc.database:
+    container_name: discount-grpc.database
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: discount
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    ports:
+      - "6001:5432"
+    networks:
+      - discount-grpc-network
+    volumes:
+      - discount-grpc.database:/var/lib/postgresql/data:rw
+
+  discount-grpc.app:
+    container_name: discount-grpc.app
+    build: .
+    environment:
+      - "ASPNETCORE_ENVIRONMENT=Development"
+      - "ConnectionStrings__PSQL=Host=discount-grpc.database;Port=5432;Database=discount;Username=user;Password=password;"
+    ports:
+      - "8001:8080"
+    depends_on:
+      - discount-grpc.database
+    networks: 
+      - discount-grpc-network
+    deploy:
+      restart_policy:
+        condition: on-failure
+        max_attempts: 3
+
+networks:
+  discount-grpc-network:
+    driver: bridge
+
+volumes:
+  discount-grpc.database:
