@@ -24,7 +24,7 @@ if (app.Environment.IsDevelopment())
     DataInitializer.Init(context);
 }
 
-app.MapGrpcService<GreeterService>();
+app.MapGrpcService<DiscountService>();
 
 app.MapGet("/",
     () =>
