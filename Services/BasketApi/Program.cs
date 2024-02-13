@@ -1,9 +1,17 @@
 using BasketApi.Endpoints;
 using BasketApi.Repositories;
+using BasketApi.Services;
+using DiscountGrpc;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddScoped<IBasketRepository, BasketRepository>();
+builder.Services
+    .AddScoped<IDiscountClientService, DiscountClientService>()
+    .AddScoped<IBasketRepository, BasketRepository>();
+
+/*** Register gRPC client ***/
+builder.Services.AddGrpcClient<DiscountProto.DiscountProtoClient>(option =>
+    option.Address = new Uri(builder.Configuration.GetConnectionString("DiscountGrpc")!));
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

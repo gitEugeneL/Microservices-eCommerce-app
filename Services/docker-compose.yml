@@ -1,0 +1,99 @@
+version: "3.8"
+
+services:
+  
+  basket-api.database:
+    container_name: basket-api.database
+    image: redis:alpine
+    ports:
+      - "6000:6379"
+    networks:
+      - microservice-network
+  
+  basket-api.app:
+    container_name: basket-api.app
+    build: BasketApi
+    environment:
+      - "ASPNETCORE_ENVIRONMENT=Development"
+      - "ConnectionStrings__Redis=basket-api.database:6379"
+      - "ConnectionStrings__DiscountGrpc=discount-grpc.app:8001"
+    ports:
+      - "8000:8080"
+    depends_on:
+      - basket-api.database
+    networks:
+      - microservice-network
+    deploy:
+      restart_policy:
+        condition: on-failure
+        max_attempts: 3
+
+  discount-grpc.database:
+    container_name: discount-grpc.database
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: discount
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    ports:
+      - "6001:5432"
+    networks:
+      - microservice-network
+    volumes:
+      - discount-grpc.database:/var/lib/postgresql/data:rw
+
+  discount-grpc.app:
+    container_name: discount-grpc.app
+    build: DiscountGrpc
+    environment:
+      - "ASPNETCORE_ENVIRONMENT=Development"
+      - "ConnectionStrings__PSQL=Host=discount-grpc.database;Port=5432;Database=discount;Username=user;Password=password;"
+    ports:
+      - "8001:8001"
+    networks:
+      - microservice-network
+    depends_on:
+      - discount-grpc.database
+    deploy:
+      restart_policy:
+        condition: on-failure
+        max_attempts: 3
+  
+  product-api.database:
+    container_name: product-api.database
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: product
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    networks:
+      - microservice-network
+    ports:
+      - "6002:5432"
+    volumes:
+      - productApi.database:/var/lib/postgresql/data:rw
+
+  product-api.app:
+    container_name: product-api.app
+    build: ProductApi
+    environment:
+      - "ASPNETCORE_ENVIRONMENT=Development"
+      - "ConnectionStrings__PSQL=Host=product-api.database;Port=5432;Database=product;Username=user;Password=password;"
+    ports:
+      - "8002:8002"
+    depends_on:
+      - product-api.database
+    networks:
+      - microservice-network
+    deploy:
+      restart_policy:
+        condition: on-failure
+        max_attempts: 3
+
+networks:
+  microservice-network:
+    driver: bridge
+
+volumes:
+  productApi.database:
+  discount-grpc.database:

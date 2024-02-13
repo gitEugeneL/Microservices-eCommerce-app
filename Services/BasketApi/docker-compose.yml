@@ -22,6 +22,7 @@ services:
       - basket-api.database
     networks:
       - basket-api-network
+      - discount-grpc-network
     deploy:
       restart_policy:
         condition: on-failure
@@ -29,4 +30,6 @@ services:
   
 networks:
   basket-api-network:
+    driver: bridge
+  discount-grpc-network:
     driver: bridge
